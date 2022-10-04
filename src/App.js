@@ -88,6 +88,10 @@ console.log(users,posts)
           <Link underline="none" to="">
             <Button onClick={(e)=>handleLogin(e)}  className="greet" variant="text">Logout</Button>
           </Link>
+          <Link underline="none" to="">
+            <Button   className="greet" variant="text">Delete Account</Button>
+          </Link>
+            
         </div></p>}
 
         {(!isSigned&&!isHidden)&&<p>
@@ -100,16 +104,14 @@ console.log(users,posts)
       noValidate
       autoComplete="off"
       >
-            <TextField id="Birthday" label="username" variant="filled" />
-            <TextField id="email" label="password" variant="filled" /> 
-            <TextField id="Password" label="password" variant="filled" /> 
+            <TextField id="First_Name" label="First Name" variant="filled" />
+            <TextField id="Last_Name" label="Last Name" variant="filled" /> 
+            <TextField id="email" label="email" variant="filled" /> 
           </Box>
           </Link>
         </p>}
-      
-      
-     
-       
+
+    
      
     </div>
   );
