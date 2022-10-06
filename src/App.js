@@ -17,12 +17,32 @@ function App() {
   const [isHidden,setisHidden]=useState(false)
   const [isSigned,setisSigned]=useState(false)
 
-  const [users, setUsers] = useState({ email: "",
-                                       first_name: "",
-                                       id: 0,
-                                       last_name: "",
-                                       username: ""});
-  const [posts, setPosts] = useState({});
+  const [users, setUsers] = useState([{
+    id: 0,
+    first: "",
+    last: "",
+    email:"",
+    username: ""
+},{id: 1,
+  first: "",
+  last: "",
+  email:"",
+  username: ""}]);//had to create in order to access props of json
+  const [posts, setPosts] = useState([{
+    id: 0,
+    username: 1,
+    post: "Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.",
+    url: "http://dummyimage.com/439x354.png/dddddd/000000",
+    Title: "Spencer's Mountain",
+    Days: "2022-08-25T00:00:00.000Z"
+},{
+  id: 1,
+  username: 1,
+  post: "Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.",
+  url: "http://dummyimage.com/439x354.png/dddddd/000000",
+  Title: "Spencer's Mountain",
+  Days: "2022-08-25T00:00:00.000Z"
+}]);
   const [password, setPassword] = useState("");
   const [first, setFirst] = useState("");
   const [last, setLast] = useState("");
@@ -41,15 +61,17 @@ function App() {
 
 
   // GET with Axios
-const fetchPost = async (a) => {
+
+const fetchPost = async (u) => {
       try {
-        let response = await client.get(`/post/${a}`);
+        let response = await client.get(`/post/${u}`);
         setPosts(response.data);
       } catch (error) {
         console.log(error);
      }
      };
-  
+
+useEffect(() => {
 const fetchUsers = async () => {
      try {
        let response = await client.get(`/user/${username}`);
@@ -58,6 +80,10 @@ const fetchUsers = async () => {
        console.log(error);
     }
   };
+  fetchUsers();
+}, [username]);
+
+
  
 
 
@@ -67,9 +93,8 @@ const fetchUsers = async () => {
 
  
  const handleLogin=(e)=>{
-  // e.preventDefault();
-  fetchUsers()
-  fetchPost(0)
+   e.preventDefault();
+   fetchPost(users[0].id)
   setisHidden(!isHidden)
 
  } 
@@ -78,9 +103,9 @@ const fetchUsers = async () => {
   setisSigned(!isSigned)
 
  }
-console.log(users,posts)
+// console.log(users[0].id,posts,username)
 // console.log(users,posts,last,first,email,post,title,username,password)
-const clearState=(e)=>{
+const clearState=()=>{
   setUsername("")
   setPassword("")
   setFirst("")
@@ -88,18 +113,30 @@ const clearState=(e)=>{
   setEmail("")
   setPost("")
   setTitle("")
-  setPosts({})
-  setUsers({})
+  setPosts([{id:0}])
+  setUsers([{
+    id: 0,
+    first: "",
+    last: "",
+    email:"",
+    username: ""
+},{id: 1,
+  first: "",
+  last: "",
+  email:"",
+  username: ""}])
+// console.log(users,posts,last,first,email,post,title,username,password)
+
 }
   return (
     <div className="App">
     
-      {!isHidden&&<p><h1 className="greet">Welcome to Your Diary</h1><div className="center">
-          <Link onClick={(e) => (handleLogin(e))} underline="none" to="">
+      {!isHidden&&<span><h1 className="greet">Welcome to Your Diary</h1><div className="center">
+          <Link onClick={(e) => {handleLogin(e)}} underline="none" to="">
             <Button className="greet" variant="text">Login</Button>
           </Link>
           <Link href="#" underline="none" to="">
-            <Button onClick={(e) => (handleSignup(e))((e)=>handleLogin(e))} className="greet" variant="text">Signup</Button>
+            <Button onClick={(e) => {handleSignup(e);handleLogin(e);}} className="greet" variant="text">Signup</Button>
     <Box
       component="form"
       sx={{
@@ -112,10 +149,10 @@ const clearState=(e)=>{
       <TextField onChange={(e) => setPassword(e.target.value)} id="Password" label="password" variant="filled" /> 
     </Box>
           </Link>
-        </div></p>}
-          {isHidden&&<p><h1 className="greet">Welcome to Your Diary</h1><div className="center">
+        </div></span>}
+          {isHidden&&<span><h1 className="greet">Welcome to Your Diary</h1><div className="center">
           <Link underline="none" to="">
-            <Button onClick={()=>(handleLogin())((clearState()))}  className="greet" variant="text">Logout</Button>
+            <Button onClick={(e)=>{handleLogin(e);clearState(e);}}  className="greet" variant="text">Logout</Button>
           </Link>
           <Link underline="none" to="">
             <Button   className="greet" variant="text">Delete Account</Button>
@@ -136,14 +173,13 @@ const clearState=(e)=>{
           </Link>
           <br/> 
           {/* users need to be mapped by their posts */}
-            <ul>
-              
-              <li></li>
-            </ul>
+          <ul style={{ listStyleType: "none" }}>
+              {(posts).map((post)=> {return (<li key={post.id}><h2>{post.Title}</h2></li>)})}
+          </ul>
 
-        </div></p>}
+        </div></span>}
 
-        {(!isSigned&&!isHidden)&&<p>
+        {(!isSigned&&!isHidden)&&<span>
           <Link underline="none" to="">
           <Box
       component="form"
@@ -158,7 +194,7 @@ const clearState=(e)=>{
             <TextField onChange={(e) => setEmail(e.target.value)}id="email" label="email" variant="filled" /> 
           </Box>
           </Link>
-        </p>}
+        </span>}
 
     
      
