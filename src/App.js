@@ -66,12 +66,14 @@ function App() {
   useEffect(() => {
 
   const login = async () => {
+    setTimeout(200)
       try {
         let response = await client.get(`/login/?username=${username}&password=${password}`);
         let x= response
         console.log(x.data)
         setTimeout(1000)
         if(x.status===401){
+          // setAuth(false)
           }
         else {
         setUsers(x.data)
@@ -145,14 +147,14 @@ const sendUser=(e)=>{
  const sendResults=(e)=>{
   e.preventDefault();
       client
-         .post(`/login/post`, {
+         .post(`/login/post/`,{
             title: title,
             post: post,
-            username: users.id,
+            username: users[0].id,
             url:url,
          })
          .then((response) => {
-            // fetchPost();
+            console.log(response)
         })
       setTitle('');
       setPost('');
@@ -161,11 +163,19 @@ const sendUser=(e)=>{
 
  const deletePost=(e,x)=>{
   e.preventDefault()
-  client.delete(`/post/${x}`);
+  console.log(x)
+  client.delete(`/login/post/?id=${x}`);
   setPosts(
     posts.filter((y) => {
        return y.id !== x;
     }))
+  // fetchPost()
+}
+const deleteUser=(e,x)=>{
+  e.preventDefault()
+  console.log(x)
+  client.delete(`/login/post/?username=${x}`);
+  handleOut(e)
   // fetchPost()
 }
 
@@ -173,17 +183,20 @@ const sendUser=(e)=>{
  const handleLogin=(e)=>{
    e.preventDefault();
   //  login()
-   setTimeout(50)
+   setTimeout(500)
   if(auth===true){
     setisHidden(!isHidden)
   }else{}
  } 
  const handleOut=(e)=>{
   e.preventDefault();
+  setUsername("")
+  setPassword("")
  setisHidden(!isHidden)
  if(isSigned===true){
-  setisSigned(!isSigned)
-  clearState()
+  setisSigned(false)
+  setTimeout(500)
+  setAuth(false)
  }
 } 
  const handleSignup =(e)=>{
@@ -196,9 +209,10 @@ const sendUser=(e)=>{
   if(u>0&&p>0&&l>0&&f>0&&m>0){
   sendUser(e)
   setisSigned(!isSigned)
+  setisHidden(!isHidden)
   }
  }
-console.log(users[0])
+console.log(users[0],posts)
 console.log(users[0].id,posts,last,first,email,post,title,username,password)
 const clearState=()=>{
   setUsername("")
