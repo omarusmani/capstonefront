@@ -57,7 +57,7 @@ function App() {
 
   
   const client = Axios.create({
-  baseURL: "https://cap-stone-brown.vercel.app",
+  baseURL: "https://cap-stone-brown.vercel.app/",
   timeout: 1000,
   });
 
@@ -174,7 +174,7 @@ const sendUser=(e)=>{
 const deleteUser=(e)=>{
   e.preventDefault()
   console.log(users[0].id)
-  client.delete(`/login/post/?id=${x}`);
+  client.delete(`/login/post/?id=${users[0].id}`);
   handleOut(e)
   // fetchPost()
 }
