@@ -63,18 +63,18 @@ function App() {
 
 
   // GET with Axios
-
+  useEffect(() => {
 
   const login = async () => {
       try {
         let response = await client.get(`/login/?username=${username}&password=${password}`);
         let x= response
-        console.log(x)
+        console.log(x.data)
+        setTimeout(1000)
         if(x.status===401){
-          setAuth(false)
           }
         else {
-          setUsers(x.data)
+        setUsers(x.data)
         setAuth(true)
       } // fetchPost()
              //let user be loggedin
@@ -83,6 +83,9 @@ function App() {
         console.log(error);
      }
      };
+     login()
+    },);
+  
      useEffect(() => {
      const fetchPost = async () => {
       try {
@@ -117,6 +120,7 @@ function App() {
 
 
 const sendUser=(e)=>{
+  e.preventDefault();
       client
          .post(`/login/`, {
             first_name:first,
@@ -130,6 +134,7 @@ const sendUser=(e)=>{
       setFirst('');
       setLast('');
       setEmail('')
+      setTimeout(1000)
       handleLogin(e)
  }
 
@@ -137,7 +142,8 @@ const sendUser=(e)=>{
  
 
 
- const sendResults=()=>{
+ const sendResults=(e)=>{
+  e.preventDefault();
       client
          .post(`/login/post`, {
             title: title,
@@ -166,7 +172,8 @@ const sendUser=(e)=>{
  
  const handleLogin=(e)=>{
    e.preventDefault();
-   login()
+  //  login()
+   setTimeout(50)
   if(auth===true){
     setisHidden(!isHidden)
   }else{}
@@ -176,17 +183,18 @@ const sendUser=(e)=>{
  setisHidden(!isHidden)
  if(isSigned===true){
   setisSigned(!isSigned)
+  clearState()
  }
 } 
  const handleSignup =(e)=>{
-  e.preventDefault()
+  e.preventDefault();
   let u= username.length
   let p= password.length
   let l= last.length
   let f= first.length
   let m= email.length
   if(u>0&&p>0&&l>0&&f>0&&m>0){
-  sendUser()
+  sendUser(e)
   setisSigned(!isSigned)
   }
  }
@@ -251,7 +259,7 @@ console.log(users,posts,last,first,email,post,title,username,password)
     </Box>
           </Link>
         </div></span>}
-          {isHidden&&<span><h1 className="greet">Welcome to Your Diary, {users.first_name}</h1><div className="center">
+          {isHidden&&<span><h1 className="greet">Welcome to Your Diary, {users[0].first_name}</h1><div className="center">
           <Link underline="none" to="">
             <Button onClick={(e)=>{handleOut(e);clearState();}}  className="greet" variant="text">Logout</Button>
           </Link>
