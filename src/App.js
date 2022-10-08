@@ -171,10 +171,10 @@ const sendUser=(e)=>{
     }))
   // fetchPost()
 }
-const deleteUser=(e,x)=>{
+const deleteUser=(e)=>{
   e.preventDefault()
-  console.log(x)
-  client.delete(`/login/post/?username=${x}`);
+  console.log(users[0].id)
+  client.delete(`/login/post/?id=${x}`);
   handleOut(e)
   // fetchPost()
 }
@@ -278,7 +278,7 @@ console.log(users,posts,last,first,email,post,title,username,password)
             <Button onClick={(e)=>{handleOut(e);clearState();}}  className="greet" variant="text">Logout</Button>
           </Link>
           <Link underline="none" to="">
-            <Button   className="greet" variant="text">Delete Account</Button>
+            <Button onClick={(e) => {deleteUser(e);}}  className="greet" variant="text">Delete Account</Button>
           </Link>
           <br/>
           <TextField onChange={(e)=>setTitle(e.target.value)} fullWidth label="Title" id="fullWidth" />
